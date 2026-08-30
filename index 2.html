@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>SABR.eg — Considered Clothing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Karla:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&family=Noto+Naskh+Arabic:wght@500&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --bg:#ECE4D0;
+    --bg-soft:#E3D9BF;
+    --ink:#221E18;
+    --ink-soft:#4A4330;
+    --accent:#8C7038;
+    --accent-text:#6B5423;
+    --rust:#7A3B2E;
+    --line:#CDC0A0;
+    --card:#F3EDDD;
+    --green:#4a6b4f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth; background:#ECE4D0;}
+  body{background:var(--bg); color:var(--ink); font-family:'Karla',sans-serif; font-weight:300;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{transition-duration:.01ms !important; animation-duration:.01ms !important;} }
+  a{color:inherit; text-decoration:none;}
+  ::selection{background:var(--accent); color:var(--bg);}
+  button{font-family:inherit; cursor:pointer;}
+  img,svg{display:block;}
+
+  #progress{position:fixed; top:0; left:0; width:100%; height:2px; background:transparent; z-index:100;}
+  #progress-fill{height:100%; width:0%; background:var(--accent); transition:width .05s linear;}
+
+  nav{position:sticky; top:0; z-index:80; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; row-gap:12px; padding:24px 44px; background:rgba(236,228,208,.88); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  .nav-mark{font-family:'Fraunces',serif; font-style:italic; font-weight:500; font-size:20px; letter-spacing:.01em; margin-right:28px;}
+  .nav-links{display:flex; align-items:center; gap:38px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase;}
+  .nav-links a{opacity:.85; transition:opacity .3s;}
+  .nav-links a:hover, .nav-links a:focus-visible{opacity:1;}
+  .cart-btn{position:relative; display:flex; align-items:center; gap:8px; border:1px solid var(--ink); background:transparent; color:var(--ink); padding:8px 18px; border-radius:2px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; transition:all .3s;}
+  .cart-btn:hover{background:var(--ink); color:var(--bg);}
+  .menu-btn{background:none; border:none; color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; opacity:.85;}
+  .menu-btn:hover{opacity:1; color:var(--accent-text);}
+  .cart-count{font-family:'IBM Plex Mono',monospace; font-size:11px;}
+  a:focus-visible, button:focus-visible{outline:1px solid var(--accent); outline-offset:3px;}
+
+  .hero{min-height:80vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px 24px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--accent-text); margin-bottom:26px;}
+  .hero h1{font-family:'Fraunces',serif; font-weight:400; font-style:italic; font-size:clamp(38px,7vw,76px); line-height:1.1; letter-spacing:-0.01em; max-width:780px;}
+  .hero p{max-width:480px; margin:26px auto 0; font-size:15px; line-height:1.9; color:var(--ink-soft);}
+  .hero-cta{margin-top:38px; display:inline-block; border:1px solid var(--ink); color:var(--ink); padding:13px 32px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; transition:all .3s;}
+  .hero-cta:hover{background:var(--ink); color:var(--bg);}
+
+  .seam{max-width:1180px; margin:0 auto; height:0; border-top:1px dashed var(--line);}
+
+  section{padding:110px 44px;}
+  .wrap{max-width:1180px; margin:0 auto;}
+  .eyebrow-sm{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:var(--accent-text); margin-bottom:18px; display:block;}
+  h2{font-family:'Fraunces',serif; font-weight:400; font-style:italic; font-size:clamp(28px,4vw,46px); line-height:1.15;}
+
+  .shop-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; flex-wrap:wrap; gap:20px;}
+  .filters{display:flex; gap:8px;}
+  .filter-btn{background:transparent; border:1px solid var(--line); color:var(--ink-soft); padding:8px 20px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; transition:all .3s;}
+  .filter-btn.active, .filter-btn:hover{border-color:var(--accent); color:var(--ink);}
+  .filter-btn.active{background:var(--card);}
+
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--line); border:1px solid var(--line);}
+  .product{background:var(--bg); display:flex; flex-direction:column; transition:background .3s;}
+  .product:hover{background:var(--card);}
+  .product-img{aspect-ratio:4/5; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;}
+  .product-img::before{content:''; position:absolute; inset:0;}
+  .tag-men .product-img::before{background:linear-gradient(160deg,#DAD0B2,#C9BC96);}
+  .tag-women .product-img::before{background:linear-gradient(160deg,#E3D2C4,#CBAF9B);}
+  .product-img span{position:relative; z-index:1; font-family:'Fraunces',serif; font-style:italic; font-size:56px; color:rgba(34,30,24,.22);}
+  .product-info{padding:22px; display:flex; flex-direction:column; gap:9px; flex:1;}
+  .product-cat{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--accent-text);}
+  .product-info h3{font-family:'Fraunces',serif; font-weight:400; font-size:19px;}
+  .product-info p{font-size:13px; color:var(--ink-soft); line-height:1.7; flex:1;}
+  .product-foot{display:flex; justify-content:space-between; align-items:center; margin-top:6px;}
+  .price{font-family:'IBM Plex Mono',monospace; font-size:14px;}
+  .add-btn{background:transparent; border:1px solid var(--ink); color:var(--ink); padding:7px 16px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; transition:all .3s;}
+  .add-btn:hover{background:var(--ink); color:var(--bg);}
+  .add-btn.added{background:var(--green); border-color:var(--green); color:#fff;}
+  @media (max-width:900px){ .grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:600px){ .grid{grid-template-columns:1fr;} nav{padding:18px 22px;} section{padding:72px 22px;} }
+
+  .about{display:flex; gap:70px; align-items:center; flex-wrap:wrap;}
+  .about-mark{font-family:'Aref Ruqaa',serif; font-weight:400; font-size:150px; line-height:1; color:var(--ink);}
+  .about-body{flex:1; min-width:280px;}
+  .about-body p{font-size:16px; line-height:1.9; color:var(--ink-soft); max-width:560px; margin-top:4px;}
+  .about-body p + p{margin-top:16px;}
+
+  footer{padding:36px 44px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; color:var(--ink-soft); border-top:1px solid var(--line);}
+  .foot-links{display:flex; gap:24px; text-transform:uppercase;}
+  .foot-links a:hover{color:var(--accent);}
+
+  /* cart drawer */
+  .overlay{position:fixed; inset:0; background:rgba(34,30,24,.45); z-index:150; opacity:0; pointer-events:none; transition:opacity .3s;}
+  .overlay.open{opacity:1; pointer-events:auto;}
+  .drawer{position:fixed; top:0; right:0; height:100%; width:min(420px,92vw); background:var(--card); z-index:160; transform:translateX(100%); transition:transform .4s cubic-bezier(.2,.8,.2,1); display:flex; flex-direction:column; border-left:1px solid var(--line);}
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{padding:26px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line);}
+  .drawer-head h3{font-family:'Fraunces',serif; font-style:italic; font-size:21px;}
+  .close-btn{background:none; border:none; color:var(--ink-soft); font-size:20px; line-height:1;}
+  .close-btn:hover{color:var(--ink);}
+  .cart-items{flex:1; overflow-y:auto; padding:14px 26px;}
+  .cart-empty{color:var(--ink-soft); font-size:13px; text-align:center; margin-top:60px;}
+  .cart-item{display:flex; gap:14px; padding:16px 0; border-bottom:1px solid var(--line);}
+  .cart-item-img{width:52px; height:66px; background:var(--bg-soft); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-style:italic; color:var(--accent); font-size:18px; flex-shrink:0;}
+  .cart-item-info{flex:1;}
+  .cart-item-info h4{font-size:13px; font-weight:400;}
+  .cart-item-info .price{font-size:12px; margin-top:4px; color:var(--ink-soft);}
+  .qty-row{display:flex; align-items:center; gap:10px; margin-top:8px;}
+  .qty-btn{width:20px; height:20px; border:1px solid var(--line); background:none; color:var(--ink); font-size:12px;}
+  .qty-btn:hover{border-color:var(--accent);}
+  .remove-btn{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.05em; text-transform:uppercase; color:var(--rust); margin-top:8px; text-decoration:underline; cursor:pointer;}
+  .drawer-foot{padding:22px 26px 28px; border-top:1px solid var(--line);}
+  .subtotal-row{display:flex; justify-content:space-between; font-size:14px; margin-bottom:16px;}
+  .subtotal-row .price{font-size:16px; color:var(--accent);}
+  .checkout-btn{width:100%; background:var(--ink); color:var(--bg); border:none; padding:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase;}
+  .checkout-btn:hover{background:var(--accent);}
+  .checkout-btn:disabled{opacity:.35; cursor:not-allowed;}
+
+  .modal-overlay{position:fixed; inset:0; background:rgba(34,30,24,.55); z-index:200; display:none; align-items:center; justify-content:center; padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--card); border:1px solid var(--line); max-width:460px; width:100%; max-height:90vh; overflow-y:auto; padding:34px;}
+  .modal h3{font-family:'Fraunces',serif; font-style:italic; font-size:23px; margin-bottom:6px;}
+  .modal .sub{color:var(--ink-soft); font-size:13px; margin-bottom:26px; line-height:1.6;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px;}
+  .field input, .field textarea{width:100%; background:var(--bg); color:var(--ink); border:1px solid var(--line); padding:11px 13px; font-family:inherit; font-size:14px; -webkit-appearance:none; appearance:none;}
+  .field input:focus, .field textarea:focus{outline:1px solid var(--accent); border-color:var(--accent);}
+  .pay-options{display:flex; flex-direction:column; gap:9px; margin:22px 0;}
+  .pay-opt{border:1px solid var(--line); padding:14px; cursor:pointer; transition:border-color .3s;}
+  .pay-opt.selected{border-color:var(--accent); background:var(--bg);}
+  .pay-opt-head{display:flex; align-items:center; gap:10px; font-size:13px;}
+  .pay-opt-head input{accent-color:var(--accent);}
+  .pay-detail{font-size:12px; color:var(--ink-soft); margin-top:8px; line-height:1.7; display:none;}
+  .pay-opt.selected .pay-detail{display:block;}
+  .pay-opt.disabled{opacity:.5;}
+  .modal-total{display:flex; justify-content:space-between; font-size:15px; margin:20px 0; padding-top:16px; border-top:1px solid var(--line);}
+  .modal-total .price{color:var(--accent); font-size:18px;}
+  .confirm-btn{width:100%; background:var(--ink); color:var(--bg); border:none; padding:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase;}
+  .confirm-btn:hover{background:var(--accent);}
+  .modal-note{font-size:11px; color:var(--ink-soft); margin-top:16px; line-height:1.7; text-align:center;}
+
+  .confirm-view{display:none; text-align:center; padding:14px 0;}
+  .confirm-view.open{display:block;}
+  .confirm-icon{font-family:'Fraunces',serif; font-style:italic; font-size:40px; color:var(--accent); margin-bottom:16px;}
+  .confirm-view h3{margin-bottom:12px;}
+  .confirm-view p{font-size:14px; color:var(--ink-soft); line-height:1.8; max-width:340px; margin:0 auto 22px;}
+  .confirm-view .close-btn2{border:1px solid var(--ink); color:var(--ink); padding:11px 28px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; background:none;}
+  .confirm-view .close-btn2:hover{background:var(--ink); color:var(--bg);}
+
+  /* menu panel */
+  .menu-panel{position:fixed; inset:0; background:var(--bg); z-index:250; transform:translateY(-100%); transition:transform .45s cubic-bezier(.2,.8,.2,1); display:flex; flex-direction:column; overflow-y:auto;}
+  .menu-panel.open{transform:translateY(0);}
+  .menu-head{display:flex; justify-content:space-between; align-items:center; padding:26px 44px; border-bottom:1px solid var(--line);}
+  .menu-head h3{font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.2em; text-transform:uppercase;}
+  .menu-list{padding:20px 44px; flex:1;}
+  .menu-list li{list-style:none; border-bottom:1px solid var(--line);}
+  .menu-list a, .menu-list button.menu-item{display:block; width:100%; text-align:left; background:none; border:none; padding:22px 0; font-family:'Fraunces',serif; font-size:26px; color:var(--ink); transition:color .3s;}
+  .menu-list a:hover, .menu-list button.menu-item:hover{color:var(--accent-text);}
+  @media (max-width:600px){ .menu-head{padding:20px 22px;} .menu-list{padding:10px 22px;} .menu-list a, .menu-list button.menu-item{font-size:22px; padding:18px 0;} }
+
+  /* policy modal */
+  .policy-body{font-size:14px; line-height:1.9; color:var(--ink-soft);}
+  .policy-body p{margin-bottom:14px;}
+  .policy-body p:last-child{margin-bottom:0;}
+</style>
+</head>
+<body>
+
+<div id="progress"><div id="progress-fill"></div></div>
+
+<nav>
+  <a href="#" class="nav-mark">SABR</a>
+  <div class="nav-links">
+    <a href="#shop">Shop</a>
+    <a href="#about">Our Story</a>
+    <button class="menu-btn" onclick="openMenu()">Menu</button>
+    <button class="cart-btn" onclick="openCart()">Bag (<span class="cart-count" id="cartCount">0</span>)</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <span class="eyebrow">SABR.eg — Cairo</span>
+  <h1>Clothing made the way patience makes things.</h1>
+  <p>Considered pieces, for men and women, made without hurry. Nothing rushed to market — every garment earns its place.</p>
+  <a href="#shop" class="hero-cta">Explore the collection</a>
+</section>
+
+<div class="seam"></div>
+
+<section id="shop">
+  <div class="wrap">
+    <div class="shop-head">
+      <div>
+        <span class="eyebrow-sm">Shop</span>
+        <h2>The collection</h2>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all" onclick="filterProducts('all',this)">All</button>
+        <button class="filter-btn" data-filter="men" onclick="filterProducts('men',this)">Men</button>
+        <button class="filter-btn" data-filter="women" onclick="filterProducts('women',this)">Women</button>
+      </div>
+    </div>
+    <div class="grid" id="productGrid"></div>
+  </div>
+</section>
+
+<div class="seam"></div>
+
+<section id="about">
+  <div class="wrap about">
+    <div class="about-mark">صبر</div>
+    <div class="about-body">
+      <span class="eyebrow-sm">Our story</span>
+      <h2>There's no rushing this</h2>
+      <p>SABR — صبر — is Arabic for patience, and it's the whole premise the brand is built on. Every piece is chosen with care rather than speed, so what reaches you is worth keeping.</p>
+      <p>The name and the practice both began in Cairo, and that same discipline now shapes every garment we make — quiet materials, honest cuts, nothing that needs a season to feel dated.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>SABR.eg © 2026 — Cairo, Egypt</span>
+  <div class="foot-links">
+    <a href="#">Instagram</a>
+    <a href="mailto:hello@sabr.eg">hello@sabr.eg</a>
+  </div>
+</footer>
+
+<!-- cart drawer -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>Your bag</h3>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="drawer-foot">
+    <div class="subtotal-row"><span>Subtotal</span><span class="price" id="cartSubtotal">0 EGP</span></div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()" disabled>Checkout</button>
+  </div>
+</div>
+
+<!-- checkout modal -->
+<div class="modal-overlay" id="checkoutOverlay">
+  <div class="modal">
+    <div id="checkoutForm">
+      <h3>Checkout</h3>
+      <p class="sub">Fill in your details and choose how you'd like to pay. Prices are in Egyptian Pounds.</p>
+      <div class="field"><label>Full name</label><input type="text" id="custName" placeholder="Your name"></div>
+      <div class="field"><label>Phone number</label><input type="tel" id="custPhone" placeholder="01xxxxxxxxx"></div>
+      <div class="field"><label>Delivery address</label><textarea id="custAddress" rows="2" placeholder="Governorate, city, street"></textarea></div>
+
+      <div class="pay-options">
+        <label class="pay-opt selected" data-pay="instapay">
+          <div class="pay-opt-head"><input type="radio" name="pay" value="instapay" checked> InstaPay</div>
+          <div class="pay-detail">Transfer the total to our InstaPay account (details will be confirmed with you). We'll follow up to confirm once your order is placed.</div>
+        </label>
+        <label class="pay-opt" data-pay="visa">
+          <div class="pay-opt-head"><input type="radio" name="pay" value="visa"> Visa</div>
+          <div class="pay-detail">Pay by Visa card. We'll contact you to complete the card payment securely.</div>
+        </label>
+      </div>
+
+      <div class="modal-total"><span>Total</span><span class="price" id="modalTotal">0 EGP</span></div>
+      <button class="confirm-btn" id="confirmBtn" onclick="placeOrder()">Place order</button>
+      <p class="modal-note">After placing your order, we'll contact you to confirm details and payment.</p>
+      <button class="close-btn" style="margin-top:10px;" onclick="closeCheckout()">Cancel</button>
+    </div>
+
+    <div class="confirm-view" id="confirmView">
+      <div class="confirm-icon">✓</div>
+      <h3>Order noted</h3>
+      <p id="confirmText"></p>
+      <button class="close-btn2" onclick="resetCheckout()">Continue shopping</button>
+    </div>
+  </div>
+</div>
+
+<!-- full menu -->
+<div class="menu-panel" id="menuPanel">
+  <div class="menu-head">
+    <h3>Menu</h3>
+    <button class="close-btn" onclick="closeMenu()">✕</button>
+  </div>
+  <ul class="menu-list">
+    <li><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">5</a></li>
+    <li><a href="#">6</a></li>
+    <li><a href="#">7</a></li>
+    <li><a href="#">8</a></li>
+    <li><button class="menu-item" onclick="openPolicy()">Policy</button></li>
+  </ul>
+</div>
+
+<!-- policy modal -->
+<div class="modal-overlay" id="policyOverlay">
+  <div class="modal">
+    <h3>Policy</h3>
+    <p class="sub">Return &amp; Exchange Policy</p>
+    <div class="policy-body">
+      <p>We offer refunds if you have any issues with the product — just contact us on the Instagram page within 24 hours.</p>
+      <p>Exchanges are available for size changes only, and the item must be in the same condition as received. Requests for exchanges must be made within 2 days of delivery.</p>
+    </div>
+    <button class="close-btn2" style="margin-top:22px;" onclick="closePolicy()">Close</button>
+  </div>
+</div>
+
+<script>
+  const products = [
+    {id:1, name:"White Linen Shirt", cat:"men", price:950, desc:"Lightweight linen, classic cut, made for warm days."},
+    {id:2, name:"Beige Chino Trousers", cat:"men", price:1200, desc:"Straight-leg cotton chinos, quietly tailored."},
+    {id:3, name:"Light Brown Jacket", cat:"men", price:1850, desc:"Mid-weight half-sleeve jacket for cooler evenings."},
+    {id:4, name:"Long Linen Dress", cat:"women", price:1450, desc:"Relaxed-fit linen dress in a loose, easy silhouette."},
+    {id:5, name:"Cream Silk Blouse", cat:"women", price:890, desc:"Soft silk blouse with a quiet, elegant finish."},
+    {id:6, name:"Embroidered Kaftan", cat:"women", price:2100, desc:"Hand-embroidered kaftan with understated detail."},
+  ];
+
+  let cart = [];
+
+  function fmt(n){ return n.toLocaleString('en-US') + ' EGP'; }
+  function catLabel(c){ return c === 'men' ? 'Men' : 'Women'; }
+  function initial(name){ return name.trim()[0]; }
+
+  function renderProducts(filter='all'){
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = '';
+    products.filter(p => filter === 'all' || p.cat === filter).forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'product tag-' + p.cat;
+      el.innerHTML = `
+        <div class="product-img"><span>${initial(p.name)}</span></div>
+        <div class="product-info">
+          <span class="product-cat">${catLabel(p.cat)}</span>
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+          <div class="product-foot">
+            <span class="price">${fmt(p.price)}</span>
+            <button class="add-btn" onclick="addToCart(${p.id}, this)">Add</button>
+          </div>
+        </div>`;
+      grid.appendChild(el);
+    });
+  }
+
+  function filterProducts(cat, btn){
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProducts(cat);
+  }
+
+  function addToCart(id, btn){
+    const existing = cart.find(c => c.id === id);
+    if(existing){ existing.qty++; } else { cart.push({id, qty:1}); }
+    renderCart();
+    if(btn){
+      btn.textContent = 'Added';
+      btn.classList.add('added');
+      setTimeout(()=>{ btn.textContent = 'Add'; btn.classList.remove('added'); }, 1100);
+    }
+  }
+
+  function changeQty(id, delta){
+    const item = cart.find(c => c.id === id);
+    if(!item) return;
+    item.qty += delta;
+    if(item.qty <= 0) cart = cart.filter(c => c.id !== id);
+    renderCart();
+  }
+
+  function removeItem(id){
+    cart = cart.filter(c => c.id !== id);
+    renderCart();
+  }
+
+  function cartTotal(){
+    return cart.reduce((sum, c) => {
+      const p = products.find(p => p.id === c.id);
+      return sum + p.price * c.qty;
+    }, 0);
+  }
+
+  function renderCart(){
+    const wrap = document.getElementById('cartItems');
+    const countEl = document.getElementById('cartCount');
+    const subtotalEl = document.getElementById('cartSubtotal');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const totalQty = cart.reduce((s,c)=>s+c.qty,0);
+    countEl.textContent = totalQty;
+    checkoutBtn.disabled = cart.length === 0;
+
+    if(cart.length === 0){
+      wrap.innerHTML = '<p class="cart-empty">Your bag is empty</p>';
+    } else {
+      wrap.innerHTML = cart.map(c => {
+        const p = products.find(p => p.id === c.id);
+        return `
+        <div class="cart-item">
+          <div class="cart-item-img">${initial(p.name)}</div>
+          <div class="cart-item-info">
+            <h4>${p.name}</h4>
+            <div class="price">${fmt(p.price)}</div>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="changeQty(${p.id},-1)">−</button>
+              <span>${c.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
+            </div>
+            <div class="remove-btn" onclick="removeItem(${p.id})">Remove</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    subtotalEl.textContent = fmt(cartTotal());
+    document.getElementById('modalTotal').textContent = fmt(cartTotal());
+  }
+
+  function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
+  function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+
+  function openCheckout(){
+    if(cart.length === 0) return;
+    document.getElementById('checkoutOverlay').classList.add('open');
+  }
+  function closeCheckout(){ document.getElementById('checkoutOverlay').classList.remove('open'); }
+
+  function openMenu(){ document.getElementById('menuPanel').classList.add('open'); }
+  function closeMenu(){ document.getElementById('menuPanel').classList.remove('open'); }
+  function openPolicy(){ closeMenu(); document.getElementById('policyOverlay').classList.add('open'); }
+  function closePolicy(){ document.getElementById('policyOverlay').classList.remove('open'); }
+
+  document.querySelectorAll('.pay-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      if(opt.classList.contains('disabled')) return;
+      document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      opt.querySelector('input').checked = true;
+    });
+  });
+
+  async function placeOrder(){
+    const name = document.getElementById('custName').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const address = document.getElementById('custAddress').value.trim();
+    const payMethod = document.querySelector('input[name="pay"]:checked').value;
+    if(!name || !phone || !address){ alert('Please fill in your name, phone number, and address.'); return; }
+    if(cart.length === 0){ return; }
+
+    const payLabel = payMethod === 'instapay' ? 'InstaPay' : 'Visa';
+
+    const orderItems = cart.map(c => {
+      const p = products.find(p => p.id === c.id);
+      return `${p.name} x${c.qty} (${fmt(p.price * c.qty)})`;
+    }).join('\n');
+
+    const confirmBtn = document.getElementById('confirmBtn');
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Placing order…';
+
+    try{
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('phone', phone);
+      formData.append('address', address);
+      formData.append('payment_method', payLabel);
+      formData.append('items', orderItems);
+      formData.append('total', fmt(cartTotal()));
+
+      const res = await fetch('https://formspree.io/f/xnpqjnka', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      });
+
+      if(!res.ok){ throw new Error('Request failed'); }
+
+      document.getElementById('confirmText').textContent =
+        `Thanks, ${name}. Your order of ${fmt(cartTotal())} has been received, to be paid by ${payLabel}. We'll reach you at ${phone} to confirm.`;
+      document.getElementById('checkoutForm').style.display = 'none';
+      document.getElementById('confirmView').classList.add('open');
+    }catch(err){
+      alert('Sorry, something went wrong sending your order. Please try again or contact us directly.');
+    }finally{
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Place order';
+    }
+  }
+
+  function resetCheckout(){
+    cart = [];
+    renderCart();
+    document.getElementById('checkoutForm').style.display = 'block';
+    document.getElementById('confirmView').classList.remove('open');
+    document.getElementById('checkoutOverlay').classList.remove('open');
+    closeCart();
+    document.getElementById('custName').value = '';
+    document.getElementById('custPhone').value = '';
+    document.getElementById('custAddress').value = '';
+  }
+
+  const fill = document.getElementById('progress-fill');
+  function updateFill(){
+    const scrolled = window.scrollY;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    fill.style.width = (max > 0 ? (scrolled/max)*100 : 0) + '%';
+  }
+  window.addEventListener('scroll', updateFill, {passive:true});
+
+  renderProducts();
+  renderCart();
+  updateFill();
+</script>
+
+</body>
+</html>
