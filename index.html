@@ -73,6 +73,7 @@
   .tag-men .product-img::before{background:linear-gradient(160deg,#DAD0B2,#C9BC96);}
   .tag-women .product-img::before{background:linear-gradient(160deg,#E3D2C4,#CBAF9B);}
   .product-img span{position:relative; z-index:1; font-family:'Fraunces',serif; font-style:italic; font-size:56px; color:rgba(34,30,24,.22);}
+  .product-img img{position:relative; z-index:1; width:100%; height:100%; object-fit:cover;}
   .product-info{padding:22px; display:flex; flex-direction:column; gap:9px; flex:1;}
   .product-cat{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--accent-text);}
   .product-info h3{font-family:'Fraunces',serif; font-weight:400; font-size:19px;}
@@ -129,8 +130,13 @@
   .modal .sub{color:var(--ink-soft); font-size:13px; margin-bottom:26px; line-height:1.6;}
   .field{margin-bottom:16px;}
   .field label{display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px;}
-  .field input, .field textarea{width:100%; background:var(--bg); color:var(--ink); border:1px solid var(--line); padding:11px 13px; font-family:inherit; font-size:14px; -webkit-appearance:none; appearance:none;}
-  .field input:focus, .field textarea:focus{outline:1px solid var(--accent); border-color:var(--accent);}
+  .field input, .field textarea, .field select{width:100%; background:var(--bg); color:var(--ink); border:1px solid var(--line); padding:11px 13px; font-family:inherit; font-size:14px; -webkit-appearance:none; appearance:none;}
+  .field input:focus, .field textarea:focus, .field select:focus{outline:1px solid var(--accent); border-color:var(--accent);}
+  .field input[type="file"]{padding:9px 10px; font-size:12px;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .field-section{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink); margin:22px 0 12px; padding-top:14px; border-top:1px solid var(--line);}
+  .field-section:first-of-type{margin-top:6px; padding-top:0; border-top:none;}
+  .field-hint{font-size:11px; color:var(--ink-soft); margin-top:6px; line-height:1.6;}
   .pay-options{display:flex; flex-direction:column; gap:9px; margin:22px 0;}
   .pay-opt{border:1px solid var(--line); padding:14px; cursor:pointer; transition:border-color .3s;}
   .pay-opt.selected{border-color:var(--accent); background:var(--bg);}
@@ -138,6 +144,9 @@
   .pay-opt-head input{accent-color:var(--accent);}
   .pay-detail{font-size:12px; color:var(--ink-soft); margin-top:8px; line-height:1.7; display:none;}
   .pay-opt.selected .pay-detail{display:block;}
+  .pay-qr{margin-top:12px; text-align:center;}
+  .pay-qr img{width:160px; height:160px; margin:0 auto; border:1px solid var(--line); border-radius:4px; background:#fff; padding:6px;}
+  .pay-qr p{margin-top:6px; font-size:11px; color:var(--ink-soft);}
   .pay-opt.disabled{opacity:.5;}
   .modal-total{display:flex; justify-content:space-between; font-size:15px; margin:20px 0; padding-top:16px; border-top:1px solid var(--line);}
   .modal-total .price{color:var(--accent); font-size:18px;}
@@ -186,7 +195,7 @@
 
 <section class="hero">
   <span class="eyebrow">SABR.eg — Cairo</span>
-  <h1>Clothing made the way patience makes things.</h1>
+  <h1>Masterpiece of patience.</h1>
   <p>Considered pieces, for men and women, made without hurry. Nothing rushed to market — every garment earns its place.</p>
   <a href="#shop" class="hero-cta">Explore the collection</a>
 </section>
@@ -217,7 +226,7 @@
     <div class="about-mark">صبر</div>
     <div class="about-body">
       <span class="eyebrow-sm">Our story</span>
-      <h2>There's no rushing this</h2>
+      <h2>There's no rush</h2>
       <p>SABR — صبر — is Arabic for patience, and it's the whole premise the brand is built on. Every piece is chosen with care rather than speed, so what reaches you is worth keeping.</p>
       <p>The name and the practice both began in Cairo, and that same discipline now shapes every garment we make — quiet materials, honest cuts, nothing that needs a season to feel dated.</p>
     </div>
@@ -242,7 +251,7 @@
   <div class="cart-items" id="cartItems"></div>
   <div class="drawer-foot">
     <div class="subtotal-row"><span>Subtotal</span><span class="price" id="cartSubtotal">0 EGP</span></div>
-    <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()" disabled>Checkout</button>
+    <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()" disabled>Buy Now</button>
   </div>
 </div>
 
@@ -252,271 +261,46 @@
     <div id="checkoutForm">
       <h3>Checkout</h3>
       <p class="sub">Fill in your details and choose how you'd like to pay. Prices are in Egyptian Pounds.</p>
-      <div class="field"><label>Full name</label><input type="text" id="custName" placeholder="Your name"></div>
-      <div class="field"><label>Phone number</label><input type="tel" id="custPhone" placeholder="01xxxxxxxxx"></div>
-      <div class="field"><label>Delivery address</label><textarea id="custAddress" rows="2" placeholder="Governorate, city, street"></textarea></div>
 
+      <div class="field-section">Contact</div>
+      <div class="field"><label>Email or phone</label><input type="text" id="custEmail" placeholder="you@email.com or 01xxxxxxxxx"></div>
+
+      <div class="field-section">Delivery</div>
+      <div class="field-row">
+        <div class="field"><label>First name</label><input type="text" id="custFirstName" placeholder="First name"></div>
+        <div class="field"><label>Last name</label><input type="text" id="custLastName" placeholder="Last name"></div>
+      </div>
+      <div class="field"><label>Company (optional)</label><input type="text" id="custCompany" placeholder="Company"></div>
+      <div class="field"><label>Address</label><input type="text" id="custAddress" placeholder="Street address"></div>
+      <div class="field"><label>Apartment, suite, etc. (optional)</label><input type="text" id="custApartment" placeholder="Apartment, floor, landmark"></div>
+      <div class="field-row">
+        <div class="field"><label>City</label><input type="text" id="custCity" placeholder="City"></div>
+        <div class="field">
+          <label>Governorate</label>
+          <select id="custGovernorate">
+            <option value="">Select governorate</option>
+            <option>Cairo</option><option>Giza</option><option>Alexandria</option><option>Qalyubia</option>
+            <option>Beheira</option><option>Dakahlia</option><option>Gharbia</option><option>Sharqia</option>
+            <option>Monufia</option><option>Kafr El Sheikh</option><option>Damietta</option><option>Port Said</option>
+            <option>Ismailia</option><option>Suez</option><option>North Sinai</option><option>South Sinai</option>
+            <option>Faiyum</option><option>Beni Suef</option><option>Minya</option><option>Assiut</option>
+            <option>Sohag</option><option>Qena</option><option>Luxor</option><option>Aswan</option>
+            <option>Red Sea</option><option>New Valley</option><option>Matrouh</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Postal code (optional)</label><input type="text" id="custPostal" placeholder="Postal code"></div>
+        <div class="field"><label>Phone</label><input type="tel" id="custPhone" placeholder="01xxxxxxxxx"></div>
+      </div>
+
+      <div class="field-section">Payment</div>
       <div class="pay-options">
         <label class="pay-opt selected" data-pay="instapay">
           <div class="pay-opt-head"><input type="radio" name="pay" value="instapay" checked> InstaPay</div>
-          <div class="pay-detail">Transfer the total to our InstaPay account (details will be confirmed with you). We'll follow up to confirm once your order is placed.</div>
-        </label>
-        <label class="pay-opt" data-pay="visa">
-          <div class="pay-opt-head"><input type="radio" name="pay" value="visa"> Visa</div>
-          <div class="pay-detail">Pay by Visa card. We'll contact you to complete the card payment securely.</div>
-        </label>
-      </div>
+          <div class="pay-detail">
+            Scan the QR code below with your InstaPay app to pay the total, then upload a screenshot of the transfer so we can confirm your order.
+            <div class="pay-qr">
+              <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAHzAfQDASIAAhEBAxEB/8QAHQAAAgMBAQEBAQAAAAAAAAAABwgABgkFBAMCAf/EAGgQAAEDAwIDAgUOCAoGBQgIBwECAwQFBhEABwgSIRMxFEFRdbMJFRgiMjc4VmGBkZSV0hYXV3FydNHTIzM2UlRVk6GxsiRCU5K0wyU1YmNzJkZmdoKEouInKDRDZGWjwcLjRYVExOH/xAAbAQEAAgMBAQ────────">
 
-      <div class="modal-total"><span>Total</span><span class="price" id="modalTotal">0 EGP</span></div>
-      <button class="confirm-btn" id="confirmBtn" onclick="placeOrder()">Place order</button>
-      <p class="modal-note">After placing your order, we'll contact you to confirm details and payment.</p>
-      <button class="close-btn" style="margin-top:10px;" onclick="closeCheckout()">Cancel</button>
-    </div>
-
-    <div class="confirm-view" id="confirmView">
-      <div class="confirm-icon">✓</div>
-      <h3>Order noted</h3>
-      <p id="confirmText"></p>
-      <button class="close-btn2" onclick="resetCheckout()">Continue shopping</button>
-    </div>
-  </div>
-</div>
-
-<!-- full menu -->
-<div class="menu-panel" id="menuPanel">
-  <div class="menu-head">
-    <h3>Menu</h3>
-    <button class="close-btn" onclick="closeMenu()">✕</button>
-  </div>
-  <ul class="menu-list">
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">4</a></li>
-    <li><a href="#">5</a></li>
-    <li><a href="#">6</a></li>
-    <li><a href="#">7</a></li>
-    <li><a href="#">8</a></li>
-    <li><button class="menu-item" onclick="openPolicy()">Policy</button></li>
-  </ul>
-</div>
-
-<!-- policy modal -->
-<div class="modal-overlay" id="policyOverlay">
-  <div class="modal">
-    <h3>Policy</h3>
-    <p class="sub">Return &amp; Exchange Policy</p>
-    <div class="policy-body">
-      <p>We offer refunds if you have any issues with the product — just contact us on the Instagram page within 24 hours.</p>
-      <p>Exchanges are available for size changes only, and the item must be in the same condition as received. Requests for exchanges must be made within 2 days of delivery.</p>
-    </div>
-    <button class="close-btn2" style="margin-top:22px;" onclick="closePolicy()">Close</button>
-  </div>
-</div>
-
-<script>
-  const products = [
-    {id:1, name:"White Linen Shirt", cat:"men", price:950, desc:"Lightweight linen, classic cut, made for warm days."},
-    {id:2, name:"Beige Chino Trousers", cat:"men", price:1200, desc:"Straight-leg cotton chinos, quietly tailored."},
-    {id:3, name:"Light Brown Jacket", cat:"men", price:1850, desc:"Mid-weight half-sleeve jacket for cooler evenings."},
-    {id:4, name:"Long Linen Dress", cat:"women", price:1450, desc:"Relaxed-fit linen dress in a loose, easy silhouette."},
-    {id:5, name:"Cream Silk Blouse", cat:"women", price:890, desc:"Soft silk blouse with a quiet, elegant finish."},
-    {id:6, name:"Embroidered Kaftan", cat:"women", price:2100, desc:"Hand-embroidered kaftan with understated detail."},
-  ];
-
-  let cart = [];
-
-  function fmt(n){ return n.toLocaleString('en-US') + ' EGP'; }
-  function catLabel(c){ return c === 'men' ? 'Men' : 'Women'; }
-  function initial(name){ return name.trim()[0]; }
-
-  function renderProducts(filter='all'){
-    const grid = document.getElementById('productGrid');
-    grid.innerHTML = '';
-    products.filter(p => filter === 'all' || p.cat === filter).forEach(p => {
-      const el = document.createElement('div');
-      el.className = 'product tag-' + p.cat;
-      el.innerHTML = `
-        <div class="product-img"><span>${initial(p.name)}</span></div>
-        <div class="product-info">
-          <span class="product-cat">${catLabel(p.cat)}</span>
-          <h3>${p.name}</h3>
-          <p>${p.desc}</p>
-          <div class="product-foot">
-            <span class="price">${fmt(p.price)}</span>
-            <button class="add-btn" onclick="addToCart(${p.id}, this)">Add</button>
-          </div>
-        </div>`;
-      grid.appendChild(el);
-    });
-  }
-
-  function filterProducts(cat, btn){
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderProducts(cat);
-  }
-
-  function addToCart(id, btn){
-    const existing = cart.find(c => c.id === id);
-    if(existing){ existing.qty++; } else { cart.push({id, qty:1}); }
-    renderCart();
-    if(btn){
-      btn.textContent = 'Added';
-      btn.classList.add('added');
-      setTimeout(()=>{ btn.textContent = 'Add'; btn.classList.remove('added'); }, 1100);
-    }
-  }
-
-  function changeQty(id, delta){
-    const item = cart.find(c => c.id === id);
-    if(!item) return;
-    item.qty += delta;
-    if(item.qty <= 0) cart = cart.filter(c => c.id !== id);
-    renderCart();
-  }
-
-  function removeItem(id){
-    cart = cart.filter(c => c.id !== id);
-    renderCart();
-  }
-
-  function cartTotal(){
-    return cart.reduce((sum, c) => {
-      const p = products.find(p => p.id === c.id);
-      return sum + p.price * c.qty;
-    }, 0);
-  }
-
-  function renderCart(){
-    const wrap = document.getElementById('cartItems');
-    const countEl = document.getElementById('cartCount');
-    const subtotalEl = document.getElementById('cartSubtotal');
-    const checkoutBtn = document.getElementById('checkoutBtn');
-    const totalQty = cart.reduce((s,c)=>s+c.qty,0);
-    countEl.textContent = totalQty;
-    checkoutBtn.disabled = cart.length === 0;
-
-    if(cart.length === 0){
-      wrap.innerHTML = '<p class="cart-empty">Your bag is empty</p>';
-    } else {
-      wrap.innerHTML = cart.map(c => {
-        const p = products.find(p => p.id === c.id);
-        return `
-        <div class="cart-item">
-          <div class="cart-item-img">${initial(p.name)}</div>
-          <div class="cart-item-info">
-            <h4>${p.name}</h4>
-            <div class="price">${fmt(p.price)}</div>
-            <div class="qty-row">
-              <button class="qty-btn" onclick="changeQty(${p.id},-1)">−</button>
-              <span>${c.qty}</span>
-              <button class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
-            </div>
-            <div class="remove-btn" onclick="removeItem(${p.id})">Remove</div>
-          </div>
-        </div>`;
-      }).join('');
-    }
-    subtotalEl.textContent = fmt(cartTotal());
-    document.getElementById('modalTotal').textContent = fmt(cartTotal());
-  }
-
-  function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
-  function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
-
-  function openCheckout(){
-    if(cart.length === 0) return;
-    document.getElementById('checkoutOverlay').classList.add('open');
-  }
-  function closeCheckout(){ document.getElementById('checkoutOverlay').classList.remove('open'); }
-
-  function openMenu(){ document.getElementById('menuPanel').classList.add('open'); }
-  function closeMenu(){ document.getElementById('menuPanel').classList.remove('open'); }
-  function openPolicy(){ closeMenu(); document.getElementById('policyOverlay').classList.add('open'); }
-  function closePolicy(){ document.getElementById('policyOverlay').classList.remove('open'); }
-
-  document.querySelectorAll('.pay-opt').forEach(opt => {
-    opt.addEventListener('click', () => {
-      if(opt.classList.contains('disabled')) return;
-      document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
-      opt.classList.add('selected');
-      opt.querySelector('input').checked = true;
-    });
-  });
-
-  async function placeOrder(){
-    const name = document.getElementById('custName').value.trim();
-    const phone = document.getElementById('custPhone').value.trim();
-    const address = document.getElementById('custAddress').value.trim();
-    const payMethod = document.querySelector('input[name="pay"]:checked').value;
-    if(!name || !phone || !address){ alert('Please fill in your name, phone number, and address.'); return; }
-    if(cart.length === 0){ return; }
-
-    const payLabel = payMethod === 'instapay' ? 'InstaPay' : 'Visa';
-
-    const orderItems = cart.map(c => {
-      const p = products.find(p => p.id === c.id);
-      return `${p.name} x${c.qty} (${fmt(p.price * c.qty)})`;
-    }).join('\n');
-
-    const confirmBtn = document.getElementById('confirmBtn');
-    confirmBtn.disabled = true;
-    confirmBtn.textContent = 'Placing order…';
-
-    try{
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('phone', phone);
-      formData.append('address', address);
-      formData.append('payment_method', payLabel);
-      formData.append('items', orderItems);
-      formData.append('total', fmt(cartTotal()));
-
-      const res = await fetch('https://formspree.io/f/xnpqjnka', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: formData
-      });
-
-      if(!res.ok){ throw new Error('Request failed'); }
-
-      document.getElementById('confirmText').textContent =
-        `Thanks, ${name}. Your order of ${fmt(cartTotal())} has been received, to be paid by ${payLabel}. We'll reach you at ${phone} to confirm.`;
-      document.getElementById('checkoutForm').style.display = 'none';
-      document.getElementById('confirmView').classList.add('open');
-    }catch(err){
-      alert('Sorry, something went wrong sending your order. Please try again or contact us directly.');
-    }finally{
-      confirmBtn.disabled = false;
-      confirmBtn.textContent = 'Place order';
-    }
-  }
-
-  function resetCheckout(){
-    cart = [];
-    renderCart();
-    document.getElementById('checkoutForm').style.display = 'block';
-    document.getElementById('confirmView').classList.remove('open');
-    document.getElementById('checkoutOverlay').classList.remove('open');
-    closeCart();
-    document.getElementById('custName').value = '';
-    document.getElementById('custPhone').value = '';
-    document.getElementById('custAddress').value = '';
-  }
-
-  const fill = document.getElementById('progress-fill');
-  function updateFill(){
-    const scrolled = window.scrollY;
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    fill.style.width = (max > 0 ? (scrolled/max)*100 : 0) + '%';
-  }
-  window.addEventListener('scroll', updateFill, {passive:true});
-
-  renderProducts();
-  renderCart();
-  updateFill();
-</script>
-
-</body>
-</html>
+```
