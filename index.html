@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>SABR.eg — Considered Clothing</title>
+<title>SABR.CAI — Considered Clothing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Karla:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&family=Noto+Naskh+Arabic:wght@500&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -23,7 +23,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth; background:#ECE4D0;}
-  body{background:var(--bg); color:var(--ink); font-family:'Karla',sans-serif; font-weight:300;}
+  body{background:var(--bg); color:var(--ink); font-family:'Karla',sans-serif; font-weight:500;}
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{transition-duration:.01ms !important; animation-duration:.01ms !important;} }
   a{color:inherit; text-decoration:none;}
   ::selection{background:var(--accent); color:var(--bg);}
@@ -42,8 +42,14 @@
   .cart-btn:hover{background:var(--ink); color:var(--bg);}
   .cart-btn svg{width:18px; height:18px; display:block;}
   .cart-count{position:absolute; top:-7px; right:-7px; background:var(--accent); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10px; line-height:1; min-width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; padding:0 3px;}
-  .menu-btn{background:none; border:none; color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; opacity:.85;}
-  .menu-btn:hover{opacity:1; color:var(--accent-text);}
+  .menu-btn{background:none; border:none; color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; opacity:.85; display:flex; flex-direction:column; align-items:center; gap:5px;}
+  .menu-btn:hover{opacity:1;}
+  .burger{display:flex; flex-direction:column; gap:3px; width:20px;}
+  .burger .bar{display:block; height:2px; width:100%; background:currentColor; transition:transform .3s ease, opacity .3s ease;}
+  .menu-btn.open .burger .bar:nth-child(1){transform:translateY(8px) rotate(45deg);}
+  .menu-btn.open .burger .bar:nth-child(2){opacity:0;}
+  .menu-btn.open .burger .bar:nth-child(3){opacity:0;}
+  .menu-btn.open .burger .bar:nth-child(4){transform:translateY(-8px) rotate(-45deg);}
   a:focus-visible, button:focus-visible{outline:1px solid var(--accent); outline-offset:3px;}
 
   .hero{min-height:80vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px 24px;}
@@ -80,6 +86,9 @@
   .product-info h3{font-family:'Fraunces',serif; font-weight:400; font-size:19px;}
   .product-info p{font-size:13px; color:var(--ink-soft); line-height:1.7; flex:1;}
   .product-foot{display:flex; justify-content:space-between; align-items:center; margin-top:6px;}
+  .sizes-row{display:flex; gap:6px; margin-top:10px;}
+  .size-btn{width:32px; height:32px; border:1px solid var(--line); background:transparent; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; font-size:11px; transition:all .2s;}
+  .size-btn.active{border-color:var(--ink); color:var(--ink); background:var(--bg-soft);}
   .price{font-family:'IBM Plex Mono',monospace; font-size:14px;}
   .add-btn{background:transparent; border:1px solid var(--ink); color:var(--ink); padding:7px 16px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; transition:all .3s;}
   .add-btn:hover{background:var(--ink); color:var(--bg);}
@@ -149,6 +158,15 @@
   .pay-qr img{width:160px; height:160px; margin:0 auto; border:1px solid var(--line); border-radius:4px; background:#fff; padding:6px;}
   .pay-qr p{margin-top:6px; font-size:11px; color:var(--ink-soft);}
   .pay-opt.disabled{opacity:.5;}
+  .shipping-row{display:flex; justify-content:space-between; align-items:center; border:1px solid var(--accent); background:var(--bg); padding:14px; margin:14px 0 0; font-size:13px;}
+  .shipping-row .price{font-family:'IBM Plex Mono',monospace;}
+  .billing-opt{display:block; border:1px solid var(--line); padding:14px; cursor:pointer; transition:border-color .3s; margin-top:9px; font-size:13px;}
+  .billing-opt.selected{border-color:var(--accent); background:var(--bg);}
+  .billing-opt input{accent-color:var(--accent); margin-right:8px;}
+  .promo-row{display:flex; gap:8px; margin-top:8px;}
+  .promo-row input{flex:1;}
+  .promo-row button{border:1px solid var(--ink); background:transparent; color:var(--ink); padding:0 18px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; transition:all .3s;}
+  .promo-row button:hover{background:var(--ink); color:var(--bg);}
   .modal-total{display:flex; justify-content:space-between; font-size:15px; margin:20px 0; padding-top:16px; border-top:1px solid var(--line);}
   .modal-total .price{color:var(--accent); font-size:18px;}
   .confirm-btn{width:100%; background:var(--ink); color:var(--bg); border:none; padding:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase;}
@@ -189,7 +207,10 @@
   <div class="nav-links">
     <a href="#shop">Shop</a>
     <a href="#about">Our Story</a>
-    <button class="menu-btn" onclick="openMenu()">Menu</button>
+    <button class="menu-btn" id="menuToggle" onclick="toggleMenu()" aria-label="Menu">
+      <span class="burger"><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>
+      <span>Menu</span>
+    </button>
     <button class="cart-btn" onclick="openCart()" aria-label="Cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
       <span class="cart-count" id="cartCount">0</span>
@@ -198,7 +219,7 @@
 </nav>
 
 <section class="hero">
-  <span class="eyebrow">SABR.eg — Cairo</span>
+  <span class="eyebrow">SABR.CAI</span>
   <h1>Masterpiece of patience.</h1>
   <p>Considered pieces, for men and women, made without hurry. Nothing rushed to market — every garment earns its place.</p>
   <a href="#shop" class="hero-cta">Explore the collection</a>
@@ -238,10 +259,9 @@
 </section>
 
 <footer>
-  <span>SABR.eg © 2026 — Cairo, Egypt</span>
+  <span>SABR.CAI © 2026 — Cairo, Egypt</span>
   <div class="foot-links">
-    <a href="#">Instagram</a>
-    <a href="mailto:hello@sabr.eg">hello@sabr.eg</a>
+    <a href="https://www.instagram.com/sabr.cai?igsi=azZnMTc5ZHR6dWpw&utm_source=qr" target="_blank" rel="noopener">Instagram</a>
   </div>
 </footer>
 
@@ -298,6 +318,9 @@
         <div class="field"><label>Phone</label><input type="tel" id="custPhone" placeholder="01xxxxxxxxx"></div>
       </div>
 
+      <div class="field-section">Shipping method</div>
+      <div class="shipping-row"><span>Standard</span><span class="price">70 EGP</span></div>
+
       <div class="field-section">Payment</div>
       <div class="pay-options">
         <label class="pay-opt selected" data-pay="instapay">
@@ -324,6 +347,40 @@
           <div class="pay-detail">Pay in cash when your order arrives. We'll contact you to confirm before shipping.</div>
         </label>
       </div>
+
+      <div class="field-section">Billing address</div>
+      <label class="billing-opt selected" data-billing="same">
+        <input type="radio" name="billing" value="same" checked> Same as shipping address
+      </label>
+      <label class="billing-opt" data-billing="different">
+        <input type="radio" name="billing" value="different"> Use a different billing address
+      </label>
+      <div id="billingFields" style="display:none; margin-top:14px;">
+        <div class="field"><label>Address</label><input type="text" id="billAddress" placeholder="Street address"></div>
+        <div class="field-row">
+          <div class="field"><label>City</label><input type="text" id="billCity" placeholder="City"></div>
+          <div class="field">
+            <label>Governorate</label>
+            <select id="billGovernorate">
+              <option value="">Select governorate</option>
+              <option>Cairo</option><option>Giza</option><option>Alexandria</option><option>Qalyubia</option>
+              <option>Beheira</option><option>Dakahlia</option><option>Gharbia</option><option>Sharqia</option>
+              <option>Monufia</option><option>Kafr El Sheikh</option><option>Damietta</option><option>Port Said</option>
+              <option>Ismailia</option><option>Suez</option><option>North Sinai</option><option>South Sinai</option>
+              <option>Faiyum</option><option>Beni Suef</option><option>Minya</option><option>Assiut</option>
+              <option>Sohag</option><option>Qena</option><option>Luxor</option><option>Aswan</option>
+              <option>Red Sea</option><option>New Valley</option><option>Matrouh</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-section">Promo code</div>
+      <div class="promo-row">
+        <input type="text" id="promoCode" placeholder="Enter code">
+        <button type="button" onclick="applyPromo()">Apply</button>
+      </div>
+      <div class="field-hint" id="promoMsg"></div>
 
       <div class="modal-total"><span>Total</span><span class="price" id="modalTotal">0 EGP</span></div>
       <button class="confirm-btn" id="confirmBtn" onclick="placeOrder()">Place order</button>
@@ -401,6 +458,12 @@
           <span class="product-cat">${catLabel(p.cat)}</span>
           <h3>${p.name}</h3>
           <p>${p.desc}</p>
+          <div class="sizes-row">
+            <button type="button" class="size-btn" data-size="S" onclick="selectSize(this)">S</button>
+            <button type="button" class="size-btn active" data-size="M" onclick="selectSize(this)">M</button>
+            <button type="button" class="size-btn" data-size="L" onclick="selectSize(this)">L</button>
+            <button type="button" class="size-btn" data-size="XL" onclick="selectSize(this)">XL</button>
+          </div>
           <div class="product-foot">
             <span class="price">${fmt(p.price)}</span>
             <button class="add-btn" onclick="addToCart(${p.id}, this)">Add</button>
@@ -416,9 +479,17 @@
     renderProducts(cat);
   }
 
+  function selectSize(btn){
+    btn.parentElement.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
   function addToCart(id, btn){
-    const existing = cart.find(c => c.id === id);
-    if(existing){ existing.qty++; } else { cart.push({id, qty:1}); }
+    const card = btn.closest('.product');
+    const sizeBtn = card ? card.querySelector('.size-btn.active') : null;
+    const size = sizeBtn ? sizeBtn.dataset.size : 'M';
+    const existing = cart.find(c => c.id === id && c.size === size);
+    if(existing){ existing.qty++; } else { cart.push({id, size, qty:1}); }
     renderCart();
     if(btn){
       btn.textContent = 'Added';
@@ -427,18 +498,20 @@
     }
   }
 
-  function changeQty(id, delta){
-    const item = cart.find(c => c.id === id);
+  function changeQty(id, size, delta){
+    const item = cart.find(c => c.id === id && c.size === size);
     if(!item) return;
     item.qty += delta;
-    if(item.qty <= 0) cart = cart.filter(c => c.id !== id);
+    if(item.qty <= 0) cart = cart.filter(c => !(c.id === id && c.size === size));
     renderCart();
   }
 
-  function removeItem(id){
-    cart = cart.filter(c => c.id !== id);
+  function removeItem(id, size){
+    cart = cart.filter(c => !(c.id === id && c.size === size));
     renderCart();
   }
+
+  const SHIPPING_COST = 70;
 
   function cartTotal(){
     return cart.reduce((sum, c) => {
@@ -446,6 +519,8 @@
       return sum + p.price * c.qty;
     }, 0);
   }
+
+  function orderTotal(){ return cartTotal() + SHIPPING_COST; }
 
   function renderCart(){
     const wrap = document.getElementById('cartItems');
@@ -465,20 +540,20 @@
         <div class="cart-item">
           <div class="cart-item-img">${initial(p.name)}</div>
           <div class="cart-item-info">
-            <h4>${p.name}</h4>
+            <h4>${p.name} <span style="opacity:.6;">— ${c.size}</span></h4>
             <div class="price">${fmt(p.price)}</div>
             <div class="qty-row">
-              <button class="qty-btn" onclick="changeQty(${p.id},-1)">−</button>
+              <button class="qty-btn" onclick="changeQty(${p.id},'${c.size}',-1)">−</button>
               <span>${c.qty}</span>
-              <button class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
+              <button class="qty-btn" onclick="changeQty(${p.id},'${c.size}',1)">+</button>
             </div>
-            <div class="remove-btn" onclick="removeItem(${p.id})">Remove</div>
+            <div class="remove-btn" onclick="removeItem(${p.id},'${c.size}')">Remove</div>
           </div>
         </div>`;
       }).join('');
     }
     subtotalEl.textContent = fmt(cartTotal());
-    document.getElementById('modalTotal').textContent = fmt(cartTotal());
+    document.getElementById('modalTotal').textContent = fmt(orderTotal());
   }
 
   function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
@@ -490,8 +565,11 @@
   }
   function closeCheckout(){ document.getElementById('checkoutOverlay').classList.remove('open'); }
 
-  function openMenu(){ document.getElementById('menuPanel').classList.add('open'); }
-  function closeMenu(){ document.getElementById('menuPanel').classList.remove('open'); }
+  function openMenu(){ document.getElementById('menuPanel').classList.add('open'); document.getElementById('menuToggle').classList.add('open'); }
+  function closeMenu(){ document.getElementById('menuPanel').classList.remove('open'); document.getElementById('menuToggle').classList.remove('open'); }
+  function toggleMenu(){
+    if(document.getElementById('menuPanel').classList.contains('open')) closeMenu(); else openMenu();
+  }
   function openPolicy(){ closeMenu(); document.getElementById('policyOverlay').classList.add('open'); }
   function closePolicy(){ document.getElementById('policyOverlay').classList.remove('open'); }
 
@@ -503,6 +581,21 @@
       opt.querySelector('input').checked = true;
     });
   });
+
+  document.querySelectorAll('.billing-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.billing-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      opt.querySelector('input').checked = true;
+      document.getElementById('billingFields').style.display = opt.dataset.billing === 'different' ? 'block' : 'none';
+    });
+  });
+
+  function applyPromo(){
+    const msg = document.getElementById('promoMsg');
+    const code = document.getElementById('promoCode').value.trim();
+    msg.textContent = code ? `Code "${code}" will be reviewed when we confirm your order.` : 'Enter a code to apply.';
+  }
 
   async function placeOrder(){
     const email = document.getElementById('custEmail').value.trim();
@@ -516,6 +609,8 @@
     const postal = document.getElementById('custPostal').value.trim();
     const phone = document.getElementById('custPhone').value.trim();
     const payMethod = document.querySelector('input[name="pay"]:checked').value;
+    const billingChoice = document.querySelector('input[name="billing"]:checked').value;
+    const promoCode = document.getElementById('promoCode').value.trim();
     const proofInput = document.getElementById('paymentProof');
     const proofFile = proofInput.files[0];
 
@@ -534,10 +629,18 @@
 
     const orderItems = cart.map(c => {
       const p = products.find(p => p.id === c.id);
-      return `${p.name} x${c.qty} (${fmt(p.price * c.qty)})`;
+      return `${p.name} (${c.size}) x${c.qty} (${fmt(p.price * c.qty)})`;
     }).join('\n');
 
     const fullAddress = [address, apartment, city, governorate, postal, 'Egypt'].filter(Boolean).join(', ');
+
+    let billingAddress = 'Same as shipping address';
+    if(billingChoice === 'different'){
+      const billAddress = document.getElementById('billAddress').value.trim();
+      const billCity = document.getElementById('billCity').value.trim();
+      const billGovernorate = document.getElementById('billGovernorate').value;
+      billingAddress = [billAddress, billCity, billGovernorate, 'Egypt'].filter(Boolean).join(', ');
+    }
 
     const confirmBtn = document.getElementById('confirmBtn');
     confirmBtn.disabled = true;
@@ -551,9 +654,14 @@
       formData.append('phone', phone);
       formData.append('address', fullAddress);
       formData.append('governorate', governorate);
+      formData.append('shipping_method', 'Standard');
+      formData.append('shipping_cost', fmt(SHIPPING_COST));
+      formData.append('billing_address', billingAddress);
+      formData.append('promo_code', promoCode || 'None');
       formData.append('payment_method', payLabel);
       formData.append('items', orderItems);
-      formData.append('total', fmt(cartTotal()));
+      formData.append('subtotal', fmt(cartTotal()));
+      formData.append('total', fmt(orderTotal()));
       if(proofFile){ formData.append('payment_screenshot', proofFile); }
 
       const res = await fetch('https://formspree.io/f/xnpqjnka', {
@@ -565,7 +673,7 @@
       if(!res.ok){ throw new Error('Request failed'); }
 
       document.getElementById('confirmText').textContent =
-        `Thanks, ${fullName}. Your order of ${fmt(cartTotal())} has been received, to be paid by ${payLabel}. We'll reach you at ${phone} to confirm.`;
+        `Thanks, ${fullName}. Your order of ${fmt(orderTotal())} has been received, to be paid by ${payLabel}. We'll reach you at ${phone} to confirm.`;
       document.getElementById('checkoutForm').style.display = 'none';
       document.getElementById('confirmView').classList.add('open');
     }catch(err){
@@ -583,11 +691,17 @@
     document.getElementById('confirmView').classList.remove('open');
     document.getElementById('checkoutOverlay').classList.remove('open');
     closeCart();
-    ['custEmail','custFirstName','custLastName','custCompany','custAddress','custApartment','custCity','custPostal','custPhone'].forEach(id => {
+    ['custEmail','custFirstName','custLastName','custCompany','custAddress','custApartment','custCity','custPostal','custPhone','billAddress','billCity','promoCode'].forEach(id => {
       document.getElementById(id).value = '';
     });
     document.getElementById('custGovernorate').value = '';
+    document.getElementById('billGovernorate').value = '';
     document.getElementById('paymentProof').value = '';
+    document.getElementById('billingFields').style.display = 'none';
+    document.getElementById('promoMsg').textContent = '';
+    document.querySelectorAll('.billing-opt').forEach(o => o.classList.remove('selected'));
+    document.querySelector('.billing-opt[data-billing="same"]').classList.add('selected');
+    document.querySelector('input[name="billing"][value="same"]').checked = true;
   }
 
   const fill = document.getElementById('progress-fill');
